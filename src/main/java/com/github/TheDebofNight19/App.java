@@ -1,13 +1,7 @@
 package com.github.TheDebofNight19;
 
-/**
- * Hello world!
- *
- */
-public class App 
-{
-    public static void main( String[] args )
+
+public class App
     {
-        System.out.println( "Hello World!" );
-    }
+
 }

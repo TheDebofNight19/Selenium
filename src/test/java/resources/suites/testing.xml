@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="TestNG">
+
+    <!--    <test name="front-end">-->
+    <!--        <packages>-->
+    <!--            <package name="com.websystique.testng.frontend.*" />-->
+    <!--        </packages>-->
+    <!--    </test>-->
+
+    <test name="AssertVSHamcrest">
+        <classes>
+            <class name ="com.github.TheDebofNight19.lesson1.YandexTest"/>
+        </classes>
+    </test>
+
+</suite>
