@@ -6,8 +6,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.AfterSuite;
+import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
 import java.util.concurrent.TimeUnit;
@@ -17,7 +17,7 @@ public class YandexTest {
 
         private WebDriver webDriver;
 
-        @BeforeMethod
+        @BeforeSuite
         public void initDriver(){
             System.setProperty("webdriver.gecko.driver","C:\\Geckodriver\\geckodriver.exe");
             webDriver = new FirefoxDriver();
@@ -37,7 +37,7 @@ public class YandexTest {
 
         }
 
-        @AfterMethod
+        @AfterSuite
         public void closeDriver(){
             webDriver.quit();
         }
