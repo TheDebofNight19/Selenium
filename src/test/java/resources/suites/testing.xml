@@ -5,7 +5,7 @@
         <classes>
             <class name ="com.github.TheDebofNight19.lesson15.YandexTest"/>
             <class name ="lesson16.SeleniumPractice"/>
-            <class name ="lesson16.SeleniumPractice"/>
+            <class name ="lesson17.Selectors"/>
         </classes>
     </test>
 

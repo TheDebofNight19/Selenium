@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
+import java.util.concurrent.TimeUnit;
+
 public class YandexTest {
 
         private static final Logger LOG = LoggerFactory.getLogger(YandexTest.class);
@@ -24,6 +26,7 @@ public class YandexTest {
         @Test
         public void testPage(){
             webDriver.get("https://yandex.ru");
+            webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
             WebElement input1 = webDriver.findElement(By.name("text"));
             input1.sendKeys("Руддщ цщкдв!"); //вбили Hello world
             input1.submit(); //нажали Enter
