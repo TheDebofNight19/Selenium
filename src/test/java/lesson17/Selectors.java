@@ -2,16 +2,24 @@ package lesson17;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
+import lesson16.SeleniumPractice;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.Select;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.testng.Assert;
 import org.testng.annotations.*;
+
+import java.util.Set;
 
 public class Selectors {
 
     private static WebDriver webDriver;
+    private static final Logger LOG = LoggerFactory.getLogger(Selectors.class);
 
     @BeforeClass
     public void initDriver() {
@@ -42,14 +50,21 @@ public class Selectors {
             languageSelect.selectByIndex(3);
         }
         (webDriver.findElement(new By.ById("go"))).click();
+        Set<Cookie> cookies = webDriver.manage().getCookies();
+        for(Cookie cookie: cookies){
+            Assert.assertEquals("done", cookie.getValue());
+            Assert.assertEquals("select", cookie.getName());
+            LOG.info(cookie.getValue());
+            LOG.info(cookie.getName());
+        }
         (webDriver.findElement(By.xpath("//div[@id='content']//" +
                 "select[@class='u-full-width']/following-sibling::label[@id='back']//a"))).click();
     }
 
     /**
+     * 3.На странице “Form” заполнить все обязательные поля и нажать на кнопку «ОТПРАВИТЬ».
      * 4.Проверить, что появилась ссылка с текстом “Great! Return to menu”и нажать на неё.
-     * 5.На странице “IFrame”ввести код, выведенный на этой странице,в поле ввода и нажать на кнопку «VERIFY».
-     * 6.Проверить, что появилась ссылка с текстом “Great! Return to menu”и нажать на неё.
+
      */
 
     @Test
@@ -76,12 +91,20 @@ public class Selectors {
                 "/following-sibling::textarea"));
         inputText.sendKeys("Where are my dragons?");
        (webDriver.findElement(By.xpath("//div/following-sibling::input"))).click();
+        Set<Cookie> cookies = webDriver.manage().getCookies();
+        for(Cookie cookie: cookies){
+            Assert.assertEquals("done", cookie.getValue());
+            Assert.assertEquals("form", cookie.getName());
+            LOG.info(cookie.getValue());
+            LOG.info(cookie.getName());
+        }
        (webDriver.findElement(By.xpath("//div//form[@id='testform']" +
                "/following-sibling::label//a"))).click();
     }
 
     /**
-     * * 3.На странице “Form” заполнить все обязательные поля и нажать на кнопку «ОТПРАВИТЬ».
+     *5.На странице “IFrame”ввести код, выведенный на этой странице,в поле ввода и нажать на кнопку «VERIFY».
+     * 6.Проверить, что появилась ссылка с текстом “Great! Return to menu”и нажать на неё.
      */
     @Test
     public void testIframe(){
@@ -95,10 +118,17 @@ public class Selectors {
         WebElement inputCode = webDriver.findElement(By.xpath("//input[@name='code']"));
         inputCode.sendKeys(code);
         (webDriver.findElement(By.xpath("//input[@name=\"ok\"and @type=\"button\"]"))).click();
+        Set<Cookie> cookies = webDriver.manage().getCookies();
+        for(Cookie cookie: cookies){
+            Assert.assertEquals("done", cookie.getValue());
+            Assert.assertEquals("iframe", cookie.getName());
+            LOG.info(cookie.getValue());
+            LOG.info(cookie.getName());
+        }
         (webDriver.findElement(By.xpath("//input[@name='ok']/following-sibling::label//a"))).click();
 
     }
-    @AfterTest
+    @AfterClass
     public void closeDriver(){
         webDriver.quit();
     }

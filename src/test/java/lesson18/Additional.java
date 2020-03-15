@@ -9,6 +9,7 @@ import org.testng.Assert;
 import org.testng.annotations.*;
 
 import java.util.List;
+import java.util.Set;
 
 public class Additional {
 
@@ -50,6 +51,14 @@ public class Additional {
                 "and text()='Return to menu']"))).click();
         webDriver.switchTo().alert();
         alert.accept();
+        webDriver.get("https://savkk.github.io/selenium-practice/");
+        Set<Cookie> cookies = webDriver.manage().getCookies();
+        for(Cookie cookie: cookies){
+            Assert.assertEquals("done", cookie.getValue());
+            Assert.assertEquals("alerts", cookie.getName());
+            LOG.info(cookie.getValue());
+            LOG.info(cookie.getName());
+        }
 
     }
 
@@ -102,12 +111,24 @@ public class Additional {
         webDriver.findElement(By.xpath("//input[@type='button' and @value='Delete']")).click();
         List<WebElement> inputs = webDriver.findElements(By.xpath("//div//input[@type = 'text']"));
         for(int i =0; i < inputs.size(); i++){
-            for (int j = 0; j < inputs.size(); j++) {
-                inputs.get(j).sendKeys("RU");
+            for (WebElement input : inputs) {
+                input.sendKeys("RU");
             }
             webDriver.findElement(By.xpath("//input[@type='button' and @value='Add']")).click();
+        }
+        Set<Cookie> cookies = webDriver.manage().getCookies();
+        for(Cookie cookie: cookies){
+            Assert.assertEquals("done", cookie.getValue());
+            Assert.assertEquals("table", cookie.getName());
+            LOG.info(cookie.getValue());
+            LOG.info(cookie.getName());
         }
         webDriver.findElement(By.xpath("//label[@id='back']//a[text()]")).click();
 
         }
+
+    @AfterClass
+    public void closeDriver(){
+        webDriver.quit();
     }
+}

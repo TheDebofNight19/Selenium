@@ -1,18 +1,24 @@
 package lesson16;
 
+import com.github.TheDebofNight19.lesson15.YandexTest;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
+import java.util.Set;
 
 
 public class SeleniumPractice {
 
+    private static final Logger LOG = LoggerFactory.getLogger(SeleniumPractice.class);
     private WebDriver webDriver;
 
     @BeforeClass
@@ -39,6 +45,13 @@ public class SeleniumPractice {
         button = webDriver.findElement(By.xpath("//*[@type=\"button\" and @value='Click me too!']"));
         Assert.assertEquals("Excellent!", element.getText());
         (button).click();
+        Set<Cookie> cookies = webDriver.manage().getCookies();
+        for(Cookie cookie: cookies){
+            Assert.assertEquals("done", cookie.getValue());
+            Assert.assertEquals("button", cookie.getName());
+            LOG.info(cookie.getValue());
+            LOG.info(cookie.getName());
+        }
         (webDriver.findElement(By.xpath("//a[text() = \"Great! Return to menu\"]"))).click();
 
     }
@@ -75,6 +88,13 @@ public class SeleniumPractice {
         (webDriver.findElement(By.xpath("//button[@id = 'radio_go']"))).click();
         element = webDriver.findElement(By.xpath("//*[@id=\"radio_result\"]"));
         Assert.assertTrue(element.getText().contains(radioButton.getText()));
+        Set<Cookie> cookies = webDriver.manage().getCookies();
+        for(Cookie checkbox: cookies){
+            Assert.assertEquals("done", checkbox.getValue());
+            Assert.assertEquals("checkboxes", checkbox.getName());
+            LOG.info(checkbox.getValue());
+            LOG.info(checkbox.getName());
+        }
         (webDriver.findElement(By.xpath("//a[text()=\"Great! Return to menu\"]"))).click();
     }
         @AfterClass
