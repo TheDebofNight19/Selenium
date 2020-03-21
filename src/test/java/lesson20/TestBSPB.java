@@ -36,4 +36,9 @@ public class TestBSPB {
         testSteps.compareText();
         testSteps.checkMyBalanceElement();
     }
+
+    @AfterClass
+    public void closeDriver(){
+        webDriver.quit();
+    }
 }
