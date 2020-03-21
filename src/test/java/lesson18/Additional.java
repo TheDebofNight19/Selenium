@@ -7,7 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.*;
+import org.testng.asserts.SoftAssert;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -52,13 +54,6 @@ public class Additional {
         webDriver.switchTo().alert();
         alert.accept();
         webDriver.get("https://savkk.github.io/selenium-practice/");
-        Set<Cookie> cookies = webDriver.manage().getCookies();
-        for(Cookie cookie: cookies){
-            Assert.assertEquals("done", cookie.getValue());
-            Assert.assertEquals("alerts", cookie.getName());
-            LOG.info(cookie.getValue());
-            LOG.info(cookie.getName());
-        }
 
     }
 
@@ -116,16 +111,26 @@ public class Additional {
             }
             webDriver.findElement(By.xpath("//input[@type='button' and @value='Add']")).click();
         }
-        Set<Cookie> cookies = webDriver.manage().getCookies();
-        for(Cookie cookie: cookies){
-            Assert.assertEquals("done", cookie.getValue());
-            Assert.assertEquals("table", cookie.getName());
-            LOG.info(cookie.getValue());
-            LOG.info(cookie.getName());
-        }
         webDriver.findElement(By.xpath("//label[@id='back']//a[text()]")).click();
 
         }
+
+    @Test
+    public void cookieTest(){
+        Set<Cookie> cookies = webDriver.manage().getCookies();
+        ArrayList<String> cookieList= new ArrayList<>();
+        cookieList.add("table");
+        cookieList.add("alerts");
+        SoftAssert softAssert = new SoftAssert();
+        for(Cookie cookie: cookies){
+            for (String s : cookieList) {
+                softAssert.assertTrue(cookie.getName().contains(s));
+            }
+            Assert.assertTrue(cookie.getValue().contains("done"));
+            LOG.info(cookie.getValue());
+            LOG.info(cookie.getName());
+        }
+    }
 
     @AfterClass
     public void closeDriver(){

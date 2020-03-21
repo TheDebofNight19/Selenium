@@ -2,7 +2,7 @@ package lesson17;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
-import lesson16.SeleniumPractice;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
@@ -13,7 +13,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.*;
+import org.testng.asserts.SoftAssert;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Set;
 
 public class Selectors {
@@ -50,13 +53,6 @@ public class Selectors {
             languageSelect.selectByIndex(3);
         }
         (webDriver.findElement(new By.ById("go"))).click();
-        Set<Cookie> cookies = webDriver.manage().getCookies();
-        for(Cookie cookie: cookies){
-            Assert.assertEquals("done", cookie.getValue());
-            Assert.assertEquals("select", cookie.getName());
-            LOG.info(cookie.getValue());
-            LOG.info(cookie.getName());
-        }
         (webDriver.findElement(By.xpath("//div[@id='content']//" +
                 "select[@class='u-full-width']/following-sibling::label[@id='back']//a"))).click();
     }
@@ -70,6 +66,7 @@ public class Selectors {
     @Test
     public void testForm(){
          webDriver.get("https://savkk.github.io/selenium-practice/");
+         File file = new File("src\\original.jpg");
          (webDriver.findElement(new By.ById("form"))).click();
          WebElement inputFirstName = webDriver.findElement(By.xpath("//label[text()=\"First Name:\"]" +
                  "/following-sibling::input"));
@@ -85,19 +82,12 @@ public class Selectors {
         inputAddress.sendKeys("Dragonstone");
         WebElement inputAvatar = webDriver.findElement(By.xpath("//label[text()=\"Avatar:\"]" +
                 "/following-sibling::input"));
-        inputAvatar.sendKeys("C:\\Users\\ЮиЖе\\Desktop\\original.jpg");
+        inputAvatar.sendKeys(file.getAbsolutePath());
         WebElement inputText = webDriver.findElement(By.xpath("//label[text()=" +
                 "\"Tell me something about yourself\"]" +
                 "/following-sibling::textarea"));
         inputText.sendKeys("Where are my dragons?");
        (webDriver.findElement(By.xpath("//div/following-sibling::input"))).click();
-        Set<Cookie> cookies = webDriver.manage().getCookies();
-        for(Cookie cookie: cookies){
-            Assert.assertEquals("done", cookie.getValue());
-            Assert.assertEquals("form", cookie.getName());
-            LOG.info(cookie.getValue());
-            LOG.info(cookie.getName());
-        }
        (webDriver.findElement(By.xpath("//div//form[@id='testform']" +
                "/following-sibling::label//a"))).click();
     }
@@ -118,15 +108,25 @@ public class Selectors {
         WebElement inputCode = webDriver.findElement(By.xpath("//input[@name='code']"));
         inputCode.sendKeys(code);
         (webDriver.findElement(By.xpath("//input[@name=\"ok\"and @type=\"button\"]"))).click();
+        (webDriver.findElement(By.xpath("//input[@name='ok']/following-sibling::label//a"))).click();
+
+    }
+    @Test
+    public void cookieTest(){
         Set<Cookie> cookies = webDriver.manage().getCookies();
+        ArrayList<String> cookieList= new ArrayList<>();
+        cookieList.add("iframe");
+        cookieList.add("form");
+        cookieList.add("select");
+        SoftAssert softAssert = new SoftAssert();
         for(Cookie cookie: cookies){
-            Assert.assertEquals("done", cookie.getValue());
-            Assert.assertEquals("iframe", cookie.getName());
+            for (String s : cookieList) {
+                softAssert.assertTrue(cookie.getName().contains(s));
+            }
+            Assert.assertTrue(cookie.getValue().contains("done"));
             LOG.info(cookie.getValue());
             LOG.info(cookie.getName());
         }
-        (webDriver.findElement(By.xpath("//input[@name='ok']/following-sibling::label//a"))).click();
-
     }
     @AfterClass
     public void closeDriver(){

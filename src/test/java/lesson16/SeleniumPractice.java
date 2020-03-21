@@ -1,6 +1,5 @@
 package lesson16;
 
-import com.github.TheDebofNight19.lesson15.YandexTest;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 import org.openqa.selenium.By;
@@ -12,7 +11,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.*;
+import org.testng.asserts.SoftAssert;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 
@@ -45,13 +46,6 @@ public class SeleniumPractice {
         button = webDriver.findElement(By.xpath("//*[@type=\"button\" and @value='Click me too!']"));
         Assert.assertEquals("Excellent!", element.getText());
         (button).click();
-        Set<Cookie> cookies = webDriver.manage().getCookies();
-        for(Cookie cookie: cookies){
-            Assert.assertEquals("done", cookie.getValue());
-            Assert.assertEquals("button", cookie.getName());
-            LOG.info(cookie.getValue());
-            LOG.info(cookie.getName());
-        }
         (webDriver.findElement(By.xpath("//a[text() = \"Great! Return to menu\"]"))).click();
 
     }
@@ -89,13 +83,24 @@ public class SeleniumPractice {
         element = webDriver.findElement(By.xpath("//*[@id=\"radio_result\"]"));
         Assert.assertTrue(element.getText().contains(radioButton.getText()));
         Set<Cookie> cookies = webDriver.manage().getCookies();
-        for(Cookie checkbox: cookies){
-            Assert.assertEquals("done", checkbox.getValue());
-            Assert.assertEquals("checkboxes", checkbox.getName());
-            LOG.info(checkbox.getValue());
-            LOG.info(checkbox.getName());
-        }
         (webDriver.findElement(By.xpath("//a[text()=\"Great! Return to menu\"]"))).click();
+    }
+
+    @Test
+    public void cookieTest(){
+        Set<Cookie> cookies = webDriver.manage().getCookies();
+        ArrayList<String> cookieList= new ArrayList<>();
+        cookieList.add("checkboxes");
+        cookieList.add("button");
+        SoftAssert softAssert = new SoftAssert();
+        for(Cookie cookie: cookies){
+            for (String s : cookieList) {
+                softAssert.assertTrue(cookie.getName().contains(s));
+            }
+            Assert.assertTrue(cookie.getValue().contains("done"));
+            LOG.info(cookie.getValue());
+            LOG.info(cookie.getName());
+        }
     }
         @AfterClass
         public void closeDriver(){
