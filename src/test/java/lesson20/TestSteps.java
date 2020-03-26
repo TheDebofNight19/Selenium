@@ -37,8 +37,8 @@ public class TestSteps {
     public void assertOneTimePasswordPage(){
 
         webDriver.get("https://idemo.bspb.ru/auth/otp?authOptionId=SMS%3A10005");
-        String s = webDriver.findElement(OneTimePassword.getMessage()).getText();
-        Assert.assertTrue(s.contains((OneTimePassword.getTEXT())));
+        String currentUrl = webDriver.getCurrentUrl();
+        Assert.assertTrue(currentUrl.contains((OneTimePassword.getURL())));
     }
 
     public void inputOneTimePassword(){

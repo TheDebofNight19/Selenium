@@ -82,11 +82,10 @@ public class SeleniumPractice {
         (webDriver.findElement(By.xpath("//button[@id = 'radio_go']"))).click();
         element = webDriver.findElement(By.xpath("//*[@id=\"radio_result\"]"));
         Assert.assertTrue(element.getText().contains(radioButton.getText()));
-        Set<Cookie> cookies = webDriver.manage().getCookies();
         (webDriver.findElement(By.xpath("//a[text()=\"Great! Return to menu\"]"))).click();
     }
 
-    @Test
+    @AfterTest
     public void cookieTest(){
         Set<Cookie> cookies = webDriver.manage().getCookies();
         ArrayList<String> cookieList= new ArrayList<>();
@@ -102,7 +101,7 @@ public class SeleniumPractice {
             LOG.info(cookie.getName());
         }
     }
-        @AfterClass
+        @AfterSuite
         public void closeDriver(){
             webDriver.quit();
         }

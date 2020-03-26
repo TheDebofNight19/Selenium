@@ -52,9 +52,14 @@ public class Selectors {
             languageSelect.selectByIndex(1);
             languageSelect.selectByIndex(3);
         }
-        (webDriver.findElement(new By.ById("go"))).click();
-        (webDriver.findElement(By.xpath("//div[@id='content']//" +
-                "select[@class='u-full-width']/following-sibling::label[@id='back']//a"))).click();
+        (webDriver.findElement(By.id("go"))).click();
+        String s = (webDriver.findElement(By.xpath("//label[@name='result' " +
+                "and text()='Alan Mathison Turing']"))).getText();
+        String t = (webDriver.findElement(By.xpath("//label[@name='result' " +
+                "and text()='Java, Python, C#']"))).getText();
+        Assert.assertEquals("Alan Mathison Turing", s);
+        Assert.assertEquals("Java, Python, C#", t);
+        (webDriver.findElement(By.id("back"))).click();
     }
 
     /**
@@ -67,29 +72,23 @@ public class Selectors {
     public void testForm(){
          webDriver.get("https://savkk.github.io/selenium-practice/");
          File file = new File("src\\original.jpg");
-         (webDriver.findElement(new By.ById("form"))).click();
-         WebElement inputFirstName = webDriver.findElement(By.xpath("//label[text()=\"First Name:\"]" +
-                 "/following-sibling::input"));
+         (webDriver.findElement(By.id("form"))).click();
+         WebElement inputFirstName = webDriver.findElement(By.xpath("//div[label = 'First Name:']//input"));
          inputFirstName.sendKeys("Daenerys");
-         WebElement inputLastName = webDriver.findElement(By.xpath("//label[text()=\"Last Name:\"]" +
-                "/following-sibling::input"));
+         WebElement inputLastName = webDriver.findElement(By.xpath("//div[label = 'Last Name:']//input"));
          inputLastName.sendKeys("Targaryen");
-         WebElement inputEmail = webDriver.findElement(By.xpath("//label[text()=\"Email:\"]" +
-                "/following-sibling::input"));
+         WebElement inputEmail = webDriver.findElement(By.xpath("//div[label = 'Email:']//input"));
          inputEmail.sendKeys("dany@dracarys.ws");
-        WebElement inputAddress = webDriver.findElement(By.xpath("//label[text()=\"Address:\"]" +
-                "/following-sibling::input"));
+        WebElement inputAddress = webDriver.findElement(By.xpath("//div[label = 'Address:']//input"));
         inputAddress.sendKeys("Dragonstone");
-        WebElement inputAvatar = webDriver.findElement(By.xpath("//label[text()=\"Avatar:\"]" +
-                "/following-sibling::input"));
+        WebElement inputAvatar = webDriver.findElement(By.xpath("//div[label = 'Avatar:']//input"));
         inputAvatar.sendKeys(file.getAbsolutePath());
-        WebElement inputText = webDriver.findElement(By.xpath("//label[text()=" +
-                "\"Tell me something about yourself\"]" +
-                "/following-sibling::textarea"));
+        WebElement inputText = webDriver.findElement(By.xpath("//div//textarea[@cols='50']"));
         inputText.sendKeys("Where are my dragons?");
-       (webDriver.findElement(By.xpath("//div/following-sibling::input"))).click();
-       (webDriver.findElement(By.xpath("//div//form[@id='testform']" +
-               "/following-sibling::label//a"))).click();
+       (webDriver.findElement(By.xpath("//div//input[@type='submit']"))).click();
+        String s = (webDriver.findElement(By.id("back"))).getText();
+        Assert.assertEquals("Great! Return to menu", s);
+       (webDriver.findElement(By.id("back"))).click();
     }
 
     /**
@@ -108,10 +107,12 @@ public class Selectors {
         WebElement inputCode = webDriver.findElement(By.xpath("//input[@name='code']"));
         inputCode.sendKeys(code);
         (webDriver.findElement(By.xpath("//input[@name=\"ok\"and @type=\"button\"]"))).click();
-        (webDriver.findElement(By.xpath("//input[@name='ok']/following-sibling::label//a"))).click();
+        String s = (webDriver.findElement(By.id("back"))).getText();
+        Assert.assertEquals("Great! Return to menu", s);
+        (webDriver.findElement(By.id("back"))).click();
 
     }
-    @Test
+    @AfterTest
     public void cookieTest(){
         Set<Cookie> cookies = webDriver.manage().getCookies();
         ArrayList<String> cookieList= new ArrayList<>();
@@ -128,7 +129,7 @@ public class Selectors {
             LOG.info(cookie.getName());
         }
     }
-    @AfterClass
+    @AfterSuite
     public void closeDriver(){
         webDriver.quit();
     }

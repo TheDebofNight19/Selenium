@@ -7,7 +7,7 @@ public class OneTimePassword {
     private static By enterButton = By.xpath("//button[@id=\"login-otp-button\"]");
     private static By message = By.xpath("//div[@id=\"otp-code-text\" and text()]");
 
-    private final static String TEXT = "код подтверждения";
+    private final static String URL = "https://idemo.bspb.ru/auth/otp?authOptionId=SMS%3A10005";
     private final static String OTP = "0000";
 
     public static By getOneTimePasswordInputField() {
@@ -22,12 +22,11 @@ public class OneTimePassword {
         return message;
     }
 
-    public static String getTEXT() {
-        return TEXT;
+    public static String getURL() {
+        return URL;
     }
 
     public static String getOTP() {
         return OTP;
     }
 }
-

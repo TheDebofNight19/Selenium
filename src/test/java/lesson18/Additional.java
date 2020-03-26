@@ -18,6 +18,22 @@ public class Additional {
     private static WebDriver webDriver;
     private static final Logger LOG = LoggerFactory.getLogger(Additional.class);
 
+    private void clickElements(List<WebElement> elements) {
+        for (int i = 0; i < elements.size(); i++) {
+            if (i % 2 != 0) {
+                elements.get(i).click();
+            }
+        }
+    }
+
+    private void inputTextIntoFields(List<WebElement> elements) {
+        for (int i = 0; i < elements.size(); i++) {
+            for (WebElement input : elements) {
+                input.sendKeys("RU");
+            }
+        }
+    }
+
     @BeforeClass
     public void initDriver() {
         WebDriverManager.chromedriver().setup();
@@ -96,26 +112,17 @@ public class Additional {
     @Test
     public void testTable(){
         webDriver.get("https://savkk.github.io/selenium-practice/");
-        (webDriver.findElement(new By.ByCssSelector("#table"))).click();
+        (webDriver.findElement(By.id("table"))).click();
         List<WebElement> elements = webDriver.findElements(By.xpath("//table//input[@type='checkbox']"));
-        for (int i = 0; i < elements.size(); i++) {
-            if(i % 2 != 0){
-                elements.get(i).click();
-            }
-        }
+        clickElements(elements);
         webDriver.findElement(By.xpath("//input[@type='button' and @value='Delete']")).click();
         List<WebElement> inputs = webDriver.findElements(By.xpath("//div//input[@type = 'text']"));
-        for(int i =0; i < inputs.size(); i++){
-            for (WebElement input : inputs) {
-                input.sendKeys("RU");
-            }
+        inputTextIntoFields(inputs);
             webDriver.findElement(By.xpath("//input[@type='button' and @value='Add']")).click();
-        }
         webDriver.findElement(By.xpath("//label[@id='back']//a[text()]")).click();
+    }
 
-        }
-
-    @Test
+    @AfterTest
     public void cookieTest(){
         Set<Cookie> cookies = webDriver.manage().getCookies();
         ArrayList<String> cookieList= new ArrayList<>();
@@ -132,7 +139,7 @@ public class Additional {
         }
     }
 
-    @AfterClass
+    @AfterSuite
     public void closeDriver(){
         webDriver.quit();
     }
